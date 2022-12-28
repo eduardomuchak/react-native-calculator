@@ -1,6 +1,11 @@
 import React from 'react';
 import { StyleSheet, Dimensions, TouchableHighlight, Text } from 'react-native';
 
+interface Props {
+  label: string;
+  onClick: Function;
+}
+
 const styles = StyleSheet.create({
   button: {
     fontSize: 40,
@@ -14,9 +19,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export const CalcButton = ({ label, onClick }: any) => {
+export const CalcButton = ({ label, onClick }: Props) => {
   return (
-    <TouchableHighlight onPress={onClick}>
+    <TouchableHighlight onPress={() => onClick()}>
       <Text style={styles.button}>{label}</Text>
     </TouchableHighlight>
   );

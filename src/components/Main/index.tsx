@@ -1,9 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { CalcButton } from '../CalcButton';
+import CalcDisplay from '../Display';
+import { useState } from 'react';
 
 export default function Main() {
+  const [displayValue, setDisplayValue] = useState(0);
+
   return (
     <View style={styles.container}>
+      <CalcDisplay value={displayValue} />
       <View style={styles.buttons}>
         <CalcButton label="AC" onClick={() => console.warn('AC')} />
         <CalcButton label="/" onClick={() => console.warn('/')} />
