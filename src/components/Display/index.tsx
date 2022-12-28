@@ -11,12 +11,12 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     padding: 20,
     justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: '#fefefe',
     alignItems: 'flex-end',
   },
   displayValue: {
     fontSize: 60,
-    color: '#fff',
+    color: '#000',
   },
 });
 

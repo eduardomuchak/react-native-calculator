@@ -26,15 +26,15 @@ export default function Main() {
     setValuesArray(newValues);
   }
 
-  function addOperation(operation: string) {
+  function addOperation(operationValue: string) {
     if (valuesArray[0] === 0) return;
 
     if (index === 0) {
       setIndex(1);
-      setOperation(operation);
+      setOperation(operationValue);
       setClearDisplay(true);
     } else {
-      const igual = operation === '=';
+      const equal = operationValue === '=';
       const newValues = [...valuesArray];
 
       try {
@@ -46,10 +46,10 @@ export default function Main() {
       newValues[1] = 0;
 
       setDisplayValue(newValues[0]);
-      setClearDisplay(!igual);
-      setOperation(igual ? null : operation);
+      setClearDisplay(!equal);
+      setOperation(equal ? null : operationValue);
       setValuesArray(newValues);
-      setIndex(igual ? 0 : 1);
+      setIndex(equal ? 0 : 1);
     }
   }
 
@@ -80,7 +80,7 @@ export default function Main() {
         <CalcButton label="3" onClick={() => addDigit('3')} />
         <CalcButton label="+" onClick={() => addOperation('+')} operation />
         <CalcButton label="0" onClick={() => addDigit('0')} double />
-        <CalcButton label="," onClick={() => addDigit('.')} />
+        <CalcButton label="." onClick={() => addDigit('.')} />
         <CalcButton label="=" onClick={() => addOperation('=')} operation />
       </View>
     </View>
