@@ -2,7 +2,7 @@ import React from 'react';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 
 interface Props {
-  value: number;
+  value: string;
 }
 
 const styles = StyleSheet.create({
