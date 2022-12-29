@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { CalcButton } from '../CalcButton';
 import CalcDisplay from '../Display';
 import { useState } from 'react';
@@ -14,16 +14,40 @@ export default function Main() {
     if (label === '.' && displayValue.includes('.')) return;
 
     const validateClearDisplay = displayValue === '0' || clearDisplay;
-    const actualValue = validateClearDisplay ? '' : displayValue;
+    let actualValue = validateClearDisplay ? '' : displayValue;
+    const lastChar = actualValue[actualValue.length - 1];
 
-    const newDisplayValue = actualValue + label;
-    const newValues = [...valuesArray];
+    if (lastChar === '(') {
+      actualValue += '0';
+    }
 
-    if (label !== '.') newValues[index] = parseFloat(newDisplayValue);
+    if (operation) {
+      const openParenthesisCount =
+        (actualValue + label).match(/\(/g)?.length || 0;
+      const closedParenthesisCount =
+        (actualValue + label).match(/\)/g)?.length || 0;
+      if (openParenthesisCount !== closedParenthesisCount) {
+        const newValues = [...valuesArray];
+        newValues[1] = Number(actualValue + label);
 
-    setDisplayValue(newDisplayValue);
+        setDisplayValue(`${valuesArray[0]} ${operation} ${newValues[1]}`);
+        setValuesArray(newValues);
+      } else {
+        const newValues = [...valuesArray];
+        newValues[1] = eval(actualValue + label);
+
+        setDisplayValue(`${valuesArray[0]} ${operation} ${newValues[1]}`);
+        setValuesArray(newValues);
+      }
+    } else {
+      const newValues = [...valuesArray];
+      newValues[0] = Number(actualValue + label);
+
+      setDisplayValue(newValues[0]);
+      setValuesArray(newValues);
+    }
+
     setClearDisplay(false);
-    setValuesArray(newValues);
   }
 
   function addOperation(operationValue: string) {
@@ -33,6 +57,8 @@ export default function Main() {
       setIndex(1);
       setOperation(operationValue);
       setClearDisplay(true);
+
+      setDisplayValue(`${displayValue} ${operationValue}`);
     } else {
       const equal = operationValue === '=';
       const newValues = [...valuesArray];
@@ -61,11 +87,52 @@ export default function Main() {
     setIndex(0);
   }
 
+  function openParenthesis() {
+    const lastChar = displayValue[displayValue.length - 1];
+    let newDisplayValue = displayValue;
+
+    if (displayValue === '0') {
+      newDisplayValue = '(';
+    } else {
+      newDisplayValue += '(';
+    }
+
+    setDisplayValue(newDisplayValue);
+  }
+
+  function closeParentesis() {
+    const lastChar = displayValue[displayValue.length - 1];
+    const openParenthesisCount = (displayValue.match(/\(/g) || []).length;
+    const closedParenthesisCount = (displayValue.match(/\)/g) || []).length;
+
+    if (
+      lastChar === '.' ||
+      lastChar === '0' ||
+      lastChar === '1' ||
+      lastChar === '2' ||
+      lastChar === '3' ||
+      lastChar === '4' ||
+      lastChar === '5' ||
+      lastChar === '6' ||
+      lastChar === '7' ||
+      lastChar === '8' ||
+      lastChar === '9' ||
+      lastChar === '(' ||
+      lastChar === ')'
+    ) {
+      if (openParenthesisCount > closedParenthesisCount) {
+        setDisplayValue(displayValue + ')');
+      }
+    }
+  }
+
   return (
     <View style={styles.container}>
       <CalcDisplay value={displayValue} />
       <View style={styles.buttons}>
-        <CalcButton label="AC" onClick={() => clear()} triple />
+        <CalcButton label="C" onClick={() => clear()} operation />
+        <CalcButton label="(" onClick={() => openParenthesis()} />
+        <CalcButton label=")" onClick={() => closeParentesis()} />
         <CalcButton label="/" onClick={() => addOperation('/')} operation />
         <CalcButton label="7" onClick={() => addDigit('7')} />
         <CalcButton label="8" onClick={() => addDigit('8')} />
