@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Dimensions, TouchableHighlight, Text } from 'react-native';
+import { useFonts, Poppins_500Medium } from '@expo-google-fonts/poppins';
 
 interface Props {
   label: string;
@@ -10,7 +11,6 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
-  container: {},
   button: {
     fontSize: 40,
     height: Dimensions.get('window').width / 4,
@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderRadius: 100,
     textAlign: 'center',
+    fontFamily: 'Poppins_500Medium',
   },
   operationButton: {
     fontSize: 40,
@@ -29,6 +30,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: '#f0f0f0',
     color: '#18c221',
+    fontFamily: 'Poppins_500Medium',
   },
   buttonDouble: {
     fontSize: 40,
@@ -38,6 +40,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     textAlign: 'center',
     width: (Dimensions.get('window').width / 4) * 2,
+    fontFamily: 'Poppins_500Medium',
   },
   buttonTriple: {
     borderRadius: 100,
@@ -47,9 +50,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     textAlign: 'center',
     width: (Dimensions.get('window').width / 4) * 3,
-    _active: {
-      backgroundColor: '#f0f0f0',
-    },
+    fontFamily: 'Poppins_500Medium',
   },
 });
 
@@ -60,12 +61,20 @@ export const CalcButton = ({
   triple,
   operation,
 }: Props) => {
+  let [fontsLoaded] = useFonts({
+    Poppins_500Medium,
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   const stylesButton = [styles.button];
   if (double) stylesButton.push(styles.buttonDouble);
   if (triple) stylesButton.push(styles.buttonTriple);
   if (operation) stylesButton.push(styles.operationButton);
   return (
-    <TouchableHighlight style={styles.container} onPress={() => onClick()}>
+    <TouchableHighlight onPress={() => onClick()}>
       <Text style={stylesButton}>{label}</Text>
     </TouchableHighlight>
   );
